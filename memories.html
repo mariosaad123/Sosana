@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أيامنا مع بعض 📸</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --rose:#e8436a;--rose-l:#ff8fab;--purple:#a855f7;
+  --teal:#14b8a6;--gold:#f9c74f;
+  --muted:rgba(255,255,255,0.55)
+}
+body{font-family:'Cairo',sans-serif;
+  background:linear-gradient(145deg,#0d0d1a 0%,#1a0a2e 50%,#0a1a2e 100%);
+  color:#fff;min-height:100vh;overflow-x:hidden}
+
+/* ═══ BACK ═══ */
+.back{position:fixed;top:16px;right:16px;z-index:99;
+  background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);
+  border-radius:50px;padding:9px 20px;color:#fff;font-size:13px;
+  text-decoration:none;backdrop-filter:blur(10px);transition:.3s;
+  display:inline-flex;align-items:center;gap:6px}
+.back:hover{background:rgba(232,67,106,0.2);border-color:var(--rose)}
+
+/* ═══ HERO ═══ */
+.hero{text-align:center;padding:80px 20px 40px}
+.hero-badge{display:inline-block;background:rgba(232,67,106,0.12);
+  border:1px solid rgba(232,67,106,0.35);border-radius:50px;
+  padding:7px 24px;font-size:11px;color:var(--rose-l);letter-spacing:2px;margin-bottom:18px}
+.hero h1{font-size:clamp(2.2em,7vw,3.5em);font-weight:900;line-height:1.1;margin-bottom:12px}
+.hero h1 span{background:linear-gradient(135deg,#ff8fab,#e8436a,#a855f7);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{color:var(--muted);font-size:.95em;line-height:2;max-width:400px;margin:0 auto}
+
+/* ═══ YEAR ═══ */
+.year-section{max-width:860px;margin:0 auto;padding:48px 16px 20px}
+.year-label{font-size:.85em;font-weight:700;letter-spacing:3px;color:var(--muted);
+  display:flex;align-items:center;gap:14px;margin-bottom:28px}
+.year-label::after{content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,rgba(255,255,255,0.12),transparent)}
+
+/* ═══ MEMORY CARD ═══ */
+.memory{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);
+  border-radius:28px;margin-bottom:28px;overflow:hidden;transition:.4s}
+.memory:hover{border-color:rgba(232,67,106,0.28);
+  box-shadow:0 8px 48px rgba(232,67,106,0.08)}
+
+/* header */
+.mem-head{padding:24px 24px 18px;display:flex;gap:16px;align-items:flex-start}
+.mem-icon{font-size:34px;line-height:1;flex-shrink:0;margin-top:2px}
+.mem-meta{flex:1}
+.mem-date{font-size:11px;color:var(--muted);letter-spacing:.5px;margin-bottom:5px}
+.mem-title{font-size:1.15em;font-weight:700;line-height:1.4}
+.mem-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.t{display:inline-block;background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.1);border-radius:50px;
+  padding:3px 12px;font-size:10px;color:var(--muted)}
+
+/* desc */
+.mem-desc{margin:0 16px 16px;padding:16px 20px;font-size:.95em;line-height:2.1;
+  color:rgba(255,255,255,0.8);
+  background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);
+  border-radius:18px}
+.mem-desc b{color:var(--rose-l)}
+
+/* ═══ PHOTOS ═══ */
+.photos-wrap{padding:0 14px 14px}
+.photos-title{font-size:11px;letter-spacing:1px;color:var(--muted);
+  margin-bottom:10px;padding:0 4px;
+  display:flex;align-items:center;gap:8px}
+.photos-title::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08)}
+
+/*
+  ═══════════════════════════════════════════════════
+   نظام الصور — بسيط جداً:
+
+   كل صورة = سطر واحد:
+   <img src="memories-2026/صورتك.jpg">
+
+   لتحديد حجم الصورة أضف class:
+   - بدون class    → مربع عادي (1×1)
+   - class="h"     → أفقي      (2×1)
+   - class="v"     → عمودي     (1×2)
+   - class="big"   → كبير      (2×2)
+   - class="full"  → عريض كامل (3×1)
+
+   للفيديو نفس الشيء بـ <video>:
+   <video src="memories-2026/فيديو.mp4">
+  ═══════════════════════════════════════════════════
+*/
+
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
+  grid-auto-rows:140px}
+@media(max-width:540px){
+  .grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:120px}
+}
+
+.grid img,.grid video{
+  width:100%;height:100%;object-fit:cover;display:block;
+  border-radius:12px;cursor:pointer;transition:.35s;
+  border:1px solid rgba(255,255,255,0.07)}
+.grid img:hover,.grid video:hover{
+  transform:scale(1.03);border-color:rgba(232,67,106,0.55);
+  box-shadow:0 6px 24px rgba(232,67,106,0.2)}
+
+/* أحجام */
+.grid img.h,  .grid video.h  {grid-column:span 2}
+.grid img.v,  .grid video.v  {grid-row:span 2}
+.grid img.big,.grid video.big{grid-column:span 2;grid-row:span 2}
+.grid img.full,.grid video.full{grid-column:1/-1}
+
+/* فيديو badge */
+.vid-wrap{position:relative;border-radius:12px;overflow:hidden;cursor:pointer}
+.vid-wrap::after{content:'▶';position:absolute;top:8px;right:8px;
+  background:rgba(0,0,0,0.6);color:#fff;font-size:11px;
+  padding:3px 8px;border-radius:6px;pointer-events:none}
+.vid-wrap video{width:100%;height:100%;object-fit:cover;display:block;border-radius:12px}
+/* span للـ vid-wrap */
+.vid-wrap.h  {grid-column:span 2}
+.vid-wrap.v  {grid-row:span 2}
+.vid-wrap.big{grid-column:span 2;grid-row:span 2}
+.vid-wrap.full{grid-column:1/-1}
+
+/* ═══ EMPTY YEAR ═══ */
+.empty{text-align:center;padding:52px 20px;color:var(--muted)}
+.empty .e{font-size:42px;opacity:.3;display:block;margin-bottom:12px}
+
+/* ═══ LIGHTBOX ═══ */
+.lb{position:fixed;inset:0;background:rgba(0,0,0,0.97);z-index:9999;
+  display:none;align-items:center;justify-content:center;
+  flex-direction:column;gap:14px;padding:16px;
+  touch-action:pan-y}
+.lb.on{display:flex}
+.lb-media{max-width:94vw;max-height:78vh;border-radius:14px;object-fit:contain;display:block}
+.lb-nav{display:flex;align-items:center;gap:14px}
+.lb-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);
+  border-radius:50px;padding:9px 22px;color:#fff;
+  font-family:'Cairo',sans-serif;font-size:13px;cursor:pointer;transition:.3s}
+.lb-btn:hover{background:rgba(232,67,106,0.3);border-color:var(--rose)}
+.lb-n{font-size:12px;color:var(--muted);min-width:44px;text-align:center}
+.lb-x{position:fixed;top:14px;left:14px;
+  background:rgba(255,255,255,0.1);border:none;border-radius:50%;
+  width:40px;height:40px;color:#fff;font-size:18px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:.3s}
+.lb-x:hover{background:rgba(232,67,106,0.35)}
+</style>
+
+
+</head>
+<body>
+
+<a class="back" href="index.html">← رجوع</a>
+
+<!-- ═══════════ HERO ═══════════ -->
+<div class="hero">
+  <div class="hero-badge">📸 ذكرياتنا</div>
+  <h1><span>أيامنا مع بعض</span></h1>
+  <p>كل لحظة عشناها سوا… محفورة هنا للأبد 💕</p>
+</div>
+
+
+<!-- ═══ YEARS NAV ═══ -->
+<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:0 16px 32px">
+  <a href="#y2026" style="background:rgba(232,67,106,0.15);border:1px solid rgba(232,67,106,0.4);border-radius:50px;padding:10px 28px;color:#ff8fab;font-family:'Cairo',sans-serif;font-size:14px;text-decoration:none;transition:.3s" onmouseover="this.style.background='rgba(232,67,106,0.3)'" onmouseout="this.style.background='rgba(232,67,106,0.15)'">✨ 2026</a>
+  <a href="#y2027" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:50px;padding:10px 28px;color:rgba(255,255,255,0.55);font-family:'Cairo',sans-serif;font-size:14px;text-decoration:none;transition:.3s" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">🌟 2027</a>
+  <a href="#y2028" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:50px;padding:10px 28px;color:rgba(255,255,255,0.55);font-family:'Cairo',sans-serif;font-size:14px;text-decoration:none;transition:.3s" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">💫 2028</a>
+  <a href="#y2029" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:50px;padding:10px 28px;color:rgba(255,255,255,0.55);font-family:'Cairo',sans-serif;font-size:14px;text-decoration:none;transition:.3s" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">💍 2029</a>
+  <a href="#y2030" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:50px;padding:10px 28px;color:rgba(255,255,255,0.55);font-family:'Cairo',sans-serif;font-size:14px;text-decoration:none;transition:.3s" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">🏡 2030</a>
+</div>
+
+
+<!-- ╔══════════════════════════════════════════════╗
+     ║                    2026                      ║
+     ╚══════════════════════════════════════════════╝ -->
+<div class="year-section" id="y2026">
+  <div class="year-label">✨ 2026</div>
+
+
+  <!-- ┌──────────────────────────────────────────┐
+       │  ذكرى — عدّل فيها براحتك               │
+       └──────────────────────────────────────────┘ -->
+  <div class="memory">
+
+    <!-- العنوان -->
+    <div class="mem-head">
+      <div class="mem-icon">🌹</div>          <!-- ← الإيموجي -->
+      <div class="mem-meta">
+        <div class="mem-date">22 — 24 أبريل 2026</div>    <!-- ← التاريخ -->
+        <div class="mem-title">أول أيام نتقابل فيها</div> <!-- ← العنوان -->
+        <div class="mem-tags">
+          <!-- ← أضف أو احذف تاقات -->
+          <span class="t">أول مقابلة وحدنا 🤍</span>
+          <span class="t">أول بحبك في الوش 💛</span>
+          <span class="t">كلمت بابا نبيل ✅</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- الوصف — اكتب ما حصل -->
+    <div class="mem-desc">
+      أول مرة نبقى في نفس المكان… نشوف بعض بعينينا مش بالصور.<br>
+      كان في إحساس <b>مش هانساه أبداً</b>… زي إنك بتقابل حد كنت بتحلم بيه من زمان وفجأة بقى حقيقي. 🌸<br><br>
+      يوم 22 شوفنا بعض في الكنيسة وكنا مبسوطين قوي لما سلمت عليكي انتي وماما وسارة وكنتي زعلانه وفاكره اني شوفتك ف البداري مع اني مخدتش بالي وبعد العشاء وقفنا شوية وسارة صورتنا اول صورة لينا مع بعض وكنا مبسوطين بطولنا اوي عشان كنا خايفين من الطول <br><br>
+
+
+     يوم 23 اتقابلنا في النهار بعد الغداء لوحدنا شوية وفادي كان بيراقبلنا الطريق وكان اول مقابلة وحدنا واحلى حاجه حصلت لانها كمان اول مره نقول الكلمة الغالية <b>"بحبك"</b>وكان اجمل وقت واحنا سوا واتكلمنا شوية قليلين ونزلت على ركبتي بوست ايدك وقولتلك <b>"تتجوزيني"</b> <br><br>
+      
+
+     يوم 24 ده <b>"احلى يوم في حياتنا"</b> لاننا اتقابلنا في الصبح شوية حلوين يمكن ربع ساعة كنا قريبين فيهم من بعض اوي وواقعين في غرام بعض وعيون بعض وبجد مقابلة عمرها ما هتتنسي وكمان واحنا مع بعض <b>"خدتك في حضني"</b>وبجد اكتر وقت فرحت بيه وحسيت انك في امان وانتي في حضني بجد<br>
+     كمان في اليوم ده <b>"اتعمدتي"</b>في كنيستك ووسط اهلك وعيلتك وانا كنت موجود وكنت فخور بيكي فوق ما تتصوري وبصورك بتلفوني وانا طاير من الفرحة والفخر بيكي وبصليلك الرب يسوع يتمجد في حياتك وتفضلي تشهدي عنه <br>
+     وآخر اليوم بقى كلمت باباكي عنك وقولتله بشجاعة <b>"انا عاوز سوسنة"</b>واتنقاشنا انا وهو وخدنا وقت بابا نبيل ده حتة عسل وكمان وافق وهو بيحبني جدا وبيحبنا احنا الاتنين وروحت بانجاز من كوم سعدة<br><br>
+
+     بس بجد فيه حد مهما قولت فيه مش هقدر اديه حقه وهى <b>" ماما مونة "</b> بجدا انا بحبها جدا ومهما اوصف مش هقدر اديها حقها هى اللي قربتنا لبعض وانا بجد بحبها جدا هى امي بالظبط وكفاية ثقتها فيا وحبها ليا واني بالنسبالها ابنها بجد انا بحب ماما اوي
+    </div>
+
+    <!-- الصور -->
+    <div class="photos-wrap">
+      <div class="photos-title">📷 الصور والذكريات</div>
+
+      <!-- ═══════════════════════════════════════════════
+           كيف تضيف صورة:
+           1. حط الصورة في فولدر memories-2026
+           2. اكتب سطر واحد:
+              <img src="memories-2026/اسم-الصورة.jpg" onclick="S(this)">
+
+           أحجام:
+              بدون class     = مربع عادي
+              class="h"      = أفقي  (يأخذ خليتين)
+              class="v"      = عمودي (يأخذ صفين)
+              class="big"    = كبير  (2×2)
+              class="full"   = عريض كامل (صف كامل)
+
+           فيديو:
+              <div class="vid-wrap" onclick="Sv(this)">
+                <video src="memories-2026/فيديو.mp4" muted></video>
+              </div>
+           ═══════════════════════════════════════════════ -->
+
+      <div class="grid" id="mem1">
+
+        <img src="memories-2026/1.jpeg" class="v"  onclick="S(this)">
+        <img src="memories-2026/2.jpeg" class="v" onclick="S(this)">
+        <img src="memories-2026/3.jpeg"  onclick="S(this)">
+        <img src="memories-2026/4.jpeg"  onclick="S(this)">
+        <img src="memories-2026/5.jpeg"  onclick="S(this)">
+        <img src="memories-2026/6.jpeg"  onclick="S(this)">
+        <img src="memories-2026/7.jpeg"  onclick="S(this)">
+        <img src="memories-2026/8.jpeg"  onclick="S(this)">
+        <img src="memories-2026/9.jpeg"  onclick="S(this)">
+
+        <div class="vid-wrap" onclick="Sv(this)">
+          <video src="memories-2026/v1.mp4" class="full"></video>
+        </div>
+
+        <!-- أضف صور هنا 👆 -->
+
+      </div>
+    </div>
+  </div>
+  <!-- ╚═══ نهاية الذكرى ═══╝ -->
+
+
+  <!-- ╔══════════════════════════════════════════════╗
+       ║  لإضافة ذكرى جديدة في 2026:                ║
+       ║  انسخ الـ div.memory فوق كاملاً             ║
+       ║  وعدّل فيه، وغيّر id="mem1" لـ id="mem2"  ║
+       ╚══════════════════════════════════════════════╝ -->
+
+</div>
+<!-- ╚═══ نهاية 2026 ═══╝ -->
+
+
+<!-- ╔══════════════════════════════════════════════╗
+     ║                    2027                      ║
+     ╚══════════════════════════════════════════════╝ -->
+<div class="year-section" id="y2027">
+  <div class="year-label">🌟 2027</div>
+
+  <!-- لما يجي وقت، انسخ أي memory من فوق وحطها هنا -->
+  <div class="empty">
+    <span class="e">📭</span>
+    لسه مفيش ذكريات… بس عندنا كتير قدامنا ❤️
+  </div>
+</div>
+
+
+<!-- ╔═════════ 2028 ═════════╗ -->
+<div class="year-section" id="y2028">
+  <div class="year-label">💫 2028</div>
+  <div class="empty"><span class="e">📭</span>بكرا هيتملا بأجمل اللحظات 💕</div>
+</div>
+
+<!-- ╔═════════ 2029 ═════════╗ -->
+<div class="year-section" id="y2029">
+  <div class="year-label">💍 2029</div>
+  <div class="empty"><span class="e">📭</span>مستنيين نملاها بذكريات حلوة ✨</div>
+</div>
+
+<!-- ╔═════════ 2030 ═════════╗ -->
+<div class="year-section" id="y2030">
+  <div class="year-label">🏡 2030</div>
+  <div class="empty"><span class="e">📭</span>المستقبل بيستنانا 🌹</div>
+</div>
+
+
+<!-- ═══ LIGHTBOX ═══ -->
+<div class="lb" id="lb">
+  <button class="lb-x" onclick="closeLB()">✕</button>
+  <div id="lb-content"></div>
+  <div class="lb-nav">
+    <button class="lb-btn" onclick="step(-1)">→ السابق</button>
+    <span class="lb-n" id="lb-n"></span>
+    <button class="lb-btn" onclick="step(1)">التالي ←</button>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<script>
+// ═══ LIGHTBOX ═══
+let items=[], cur=0, tx=0;
+
+// صورة عادية
+function S(el){
+  items=[...el.closest('.grid').querySelectorAll('img')];
+  cur=items.indexOf(el);
+  show();
+  open();
+}
+
+// فيديو
+function Sv(el){
+  const grid=el.closest('.grid');
+  // نجمع الصور والفيديوهات ونرتبهم
+  items=[...grid.querySelectorAll('img,.vid-wrap')];
+  cur=items.indexOf(el);
+  show();
+  open();
+}
+
+function open(){
+  document.getElementById('lb').classList.add('on');
+  document.body.style.overflow='hidden';
+}
+
+function show(){
+  const el=items[cur];
+  const c=document.getElementById('lb-content');
+  if(el.tagName==='IMG'){
+    c.innerHTML=`<img src="${el.src}" class="lb-media">`;
+  } else {
+    // vid-wrap
+    const v=el.querySelector('video');
+    c.innerHTML=`<video src="${v.src}" controls autoplay class="lb-media"
+      style="max-width:94vw;max-height:78vh;border-radius:14px"></video>`;
+  }
+  document.getElementById('lb-n').textContent=`${cur+1} / ${items.length}`;
+}
+
+function step(d){cur=(cur+d+items.length)%items.length;show();}
+
+function closeLB(){
+  document.getElementById('lb').classList.remove('on');
+  document.getElementById('lb-content').innerHTML='';
+  document.body.style.overflow='';
+}
+
+// إغلاق بالضغط على الخلفية
+document.getElementById('lb').addEventListener('click',e=>{
+  if(e.target===e.currentTarget)closeLB();
+});
+
+// سحب على الموبايل
+document.getElementById('lb').addEventListener('touchstart',e=>{tx=e.touches[0].clientX;});
+document.getElementById('lb').addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tx;
+  if(Math.abs(dx)>50)step(dx>0?-1:1);
+});
+
+// أسهم الكيبورد
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('lb').classList.contains('on'))return;
+  if(e.key==='ArrowLeft')step(1);
+  if(e.key==='ArrowRight')step(-1);
+  if(e.key==='Escape')closeLB();
+});
+</script>
+</body>
+</html>
